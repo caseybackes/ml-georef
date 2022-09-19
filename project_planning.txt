@@ -1,0 +1,25 @@
+Purpose:
+Automatically georeference remote sensing imagery of arbitrary spatial resolution in the visible band.  
+Objective:
+Correctly georeference input imagery to within 5 pixel accuracy without regard for spatial resolution. 
+
+Planning and Project Phases:
+Input image -> 
+	classify segments for high quality ground control points -> 
+		download free imagery at comparable spatial resolution -> 
+			Calculate the coefficients for the spatial transform -> 
+				Apply spatial transform to new geotiff image derived from input image -> 
+					Verify results in GIS platform (QGIS). 
+
+
+Phase 0: Curate input training data 
+	Determine additional input metadata
+Phase 1: Train CNN model for ground control point (GCP) identification 
+Phase 2: Using CNN model, capture pixel coordinates of high quality input image GCPs  
+	Probably need to resample to same resolution
+Phase 3: Using CNN model, locate same features in reference image data, taking the lat, long location 
+Phase 4: Use the lat long GCPs and pixel locations in input image to calculate linear transform coefficients
+	Linear is fine, it calibrates for translation, rotation, and skew. 
+Phase 5: Generate new GEOTIFF of input image with applied transform. 
+Phase 6: Verify results qualitatively via QGIS and qualify performance. Determine and implement improvements. 
+
