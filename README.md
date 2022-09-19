@@ -1,15 +1,15 @@
-### Machine Learning and CNN Assisted Georeferencing of Remote Sensing Imagery
+# Machine Learning and CNN Assisted Georeferencing of Remote Sensing Imagery
 
-# Quick Introduction
+### Quick Introduction
 
 Georeferencing satellite imagery is typically done by hand using ground control points (GCPs) from a refence image data set that is already georeferenced. This can be fairly quick - albeit tedious -  process in any GIS platform depending on the number of GCPs used for georefencing. The number and quality of GCPs will directly impact the quality of the linear mathematical solution for the georeferencing the image data being processed. This project aims to accelerate the process of georeferencing fresh image data while maintaining (or even surpassing) geospatial location accuracy. 
 
 
-# Overview
+### Overview
 
 A convolutional neural-network could be trained to identify candidate spaital features of a raw satellite image which could be similarly located in a reference image which has already been mapped to geospaital coordinates. The linear transformation coefficents for a proper tranform can be constructed that would georeference the input image to nearly the same accuracy as the reference image. The tranformation can be applied to the input image to create a GeoTiff image for further analysis. This process would ideally acclerate or replace the tedious process of selecting and moving GCPs in each image by hand. Integrated into data processing pipelines, this automatic direct georeferencing approach could support fully autonomous satellite image processing pipelines to produce analysis ready data (ARD) for further processing. 
 
-# Method
+### Method
 
 Identifying candidate GCPs in a recent remote sensing data aquisition that can be matched to the same geospatial feature in a georeferened image can be automated through the use of convolutional neural networks. Within the middle layers of a fully trained convolutional neural network, intermediate kernels can be interpreted as one-hot contrast enhanced edge detection kernels. Geospatial features that have traditionally be useful for selecting by human hands typically have high contrast lie at the intersection or vertex of sharp edges of these features. Its much easier to identify the corner of a road in both the processing image and the reference image than it is to identify the center of a crop field in each image. The return value of a CNN-identified geospatial feature that could be GCP candidate would be a subset of pixels that represent the best fit for a feature of interest. The center pixel of this small sub-image would be the pixel of interest to use in the linear transformation in combination with the lat-long coordinate of the reference image. As many as 20 or 30 GCPs are typically used to refine the fit when done by hand. This number could be substaintially higher through an automated process that leverages object detection. 
 
