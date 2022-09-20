@@ -1,0 +1,2 @@
+This directory is for training the CNN model that will identify appropriate high quality GCP candidates in the 
+input raster image.  
