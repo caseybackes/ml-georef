@@ -23,7 +23,7 @@ def gcpfile2df(file, save_csv=True):
     for i in range(0,len(header)):
         df[header[i]] = data[i]
     if save_csv:
-        df.to_csv(f"{file}.csv")
+        df.to_csv(f"{file}.csv", index=False)
     return df
 
 
@@ -40,19 +40,30 @@ def main(path_start=1, path_end=234, row_start=1, row_end=249, update=False):
                 row="0"+row
             try:
                 url = f"https://landsat.usgs.gov/GCP/collection01/gcp/{path}/{row}/GCPLib"
-                if update:
+                if update or not os.path.exists(f'../data/gcps/path_{path}_row_{row}.csv'):
                     filename = wget.download(url, out=f"path_{path}_row_{row}") # >> 'path_010_row_010'
                     df_sub = gcpfile2df(filename, save_csv=True)
                     stats['SUCCESS'].append(filename)
                     subprocess.call(['rm', filename])
                     subprocess.call(['mv', f"{filename}.csv", '../data/gcps/'])
-                if not update:
-                    if os.path.exists(f'../data/gcps/path_{path}_row_{row}.csv'):
-                        continue 
+
+                if not update and os.path.exists(f'../data/gcps/path_{path}_row_{row}.csv'):
+                        stats['SUCCESS'].append(f"CURRENT_path_{path}_row_{row}") 
+                        
+                # else:
+                #     filename = wget.download(url, out=f"path_{path}_row_{row}") # >> 'path_010_row_010'
+                #     df_sub = gcpfile2df(filename, save_csv=True)
+                #     stats['SUCCESS'].append(filename)
+                #     subprocess.call(['rm', filename])
+                #     subprocess.call(['mv', f"{filename}.csv", '../data/gcps/'])
+
+
 
             except: 
                 stats['FAILED'].append(url)
                 pass 
+    if stats['SUCCESS']==[] and stats['FAILED']==[]:
+        print("Ground Control Points in given range appear to be up to date.")
     return stats
 
 
