@@ -26,9 +26,9 @@ def gcpfile2df(file, save_csv=True):
 
 def main():
     stats = {'SUCCESS':list(), 'FAILED':list()}
-
-    for path in range(1,233):
-        for row in range(1, 248):
+    print("Downloading Ground Control Points from Landsat Website...")
+    for path in range(1,20):
+        for row in range(1, 24):
             path = str(path)
             if len(path)==2:
                 path = "0"+path
@@ -41,9 +41,10 @@ def main():
                 df_sub = gcpfile2df(filename, save_csv=True)
                 stats['SUCCESS'].append(filename)
                 subprocess.call(['rm', filename])
-                subprocess.call(['mv', f"{filename}.csv", '../data/'])
-            except Exception as exp: 
-                stats['FAILED'].append(filename)
+                subprocess.call(['mv', f"{filename}.csv", '../data/gcps/'])
+                print(filename)
+            except: 
+                stats['FAILED'].append(url)
                 pass 
     return stats
 

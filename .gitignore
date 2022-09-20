@@ -1,1 +1,2 @@
-data/*.csv
+data/gcps/*.csv
+*__pycache__*
