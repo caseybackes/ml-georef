@@ -15,3 +15,20 @@ Identifying candidate GCPs in a recent remote sensing data aquisition that can b
 
 However, at least one initially obvious edge case immedidately come to mind - high frequency occurances of nearly identical geospatial features. For example, road intersections or corners in a highly urbanized region. Returning the pixel coordinates of the center of such features may be very difficult to discriminate in a list of Feature A: Occurance1, Occurance2, ..., and so forth. This highlights the necessity for spaital context in the broader scene. Astrophysical researchers, expert astrophotography hobbiests, and satellite guidance-naviation-control (GNC) engineers have long been familiar with the problem of high-frequency feature occurance in their datasets. A method referred to as TRIAD is commonly implemented to take relative feature locations into context when defining a broader coordinate transformation. It is this broader context of the scene that must be taken into account for an automated direct gereferencing technique. But the question is: while modern star trackers and astronomy researchers use stellar magnitudes in combination with relative location to discriminate features, how can this be applied to geospatial features in remote sensing imagery? What characteristic can be used to solve the TRIAD equation? 
 
+
+
+
+
+### Notes
+
+Maybe I should try to solve the object detection problem first. Train a CNN to detect objects that are high quality GCP candidates. 
+
+1. Define 'high quality GCP candidates'
+
+
+
+
+
+
+
+
