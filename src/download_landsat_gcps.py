@@ -10,7 +10,7 @@ import subprocess
 import pandas as pd
 import numpy as np
 import argparse 
-
+import os 
 
 
 def gcpfile2df(file, save_csv=True):
@@ -27,7 +27,7 @@ def gcpfile2df(file, save_csv=True):
     return df
 
 
-def main(path_start=1, path_end=234, row_start=1, row_end=249):
+def main(path_start=1, path_end=234, row_start=1, row_end=249, update=False):
     stats = {'SUCCESS':list(), 'FAILED':list()}
     print("Downloading Ground Control Points from Landsat Website...")
     for path in range(path_start,path_end):
@@ -40,12 +40,16 @@ def main(path_start=1, path_end=234, row_start=1, row_end=249):
                 row="0"+row
             try:
                 url = f"https://landsat.usgs.gov/GCP/collection01/gcp/{path}/{row}/GCPLib"
-                filename = wget.download(url, out=f"path_{path}_row_{row}") # >> 'path_010_row_010'
-                df_sub = gcpfile2df(filename, save_csv=True)
-                stats['SUCCESS'].append(filename)
-                subprocess.call(['rm', filename])
-                subprocess.call(['mv', f"{filename}.csv", '../data/gcps/'])
-                print(filename)
+                if update:
+                    filename = wget.download(url, out=f"path_{path}_row_{row}") # >> 'path_010_row_010'
+                    df_sub = gcpfile2df(filename, save_csv=True)
+                    stats['SUCCESS'].append(filename)
+                    subprocess.call(['rm', filename])
+                    subprocess.call(['mv', f"{filename}.csv", '../data/gcps/'])
+                if not update:
+                    if os.path.exists(f'../data/gcps/path_{path}_row_{row}.csv'):
+                        continue 
+
             except: 
                 stats['FAILED'].append(url)
                 pass 
@@ -57,10 +61,12 @@ def main(path_start=1, path_end=234, row_start=1, row_end=249):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument('--path-start', default=1)
-    parser.add_argument('--path-end', default=234)
-    parser.add_argument('--row-start', default=1)
-    parser.add_argument('--row-end', default=249)
+    parser.add_argument('--path-start', default=1, type=int)
+    parser.add_argument('--path-end', default=234,type=int)
+    parser.add_argument('--row-start', default=1, type=int)
+    parser.add_argument('--row-end', default=249, type=int)
+    parser.add_argument('--update', default=False, action='store_true')
 
     args = parser.parse_args()
-    stats = main(args.path_start, args.path_end, args.row_start, args.row_end)
+    stats = main(args.path_start, args.path_end, args.row_start, args.row_end, args.update)
+    print(stats)
