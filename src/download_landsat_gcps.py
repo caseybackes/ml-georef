@@ -9,6 +9,9 @@ import wget
 import subprocess
 import pandas as pd
 import numpy as np
+import argparse 
+
+
 
 def gcpfile2df(file, save_csv=True):
     with open(file) as f:
@@ -24,11 +27,11 @@ def gcpfile2df(file, save_csv=True):
     return df
 
 
-def main():
+def main(path_start=1, path_end=234, row_start=1, row_end=249):
     stats = {'SUCCESS':list(), 'FAILED':list()}
     print("Downloading Ground Control Points from Landsat Website...")
-    for path in range(1,20):
-        for row in range(1, 24):
+    for path in range(path_start,path_end):
+        for row in range(row_start, row_end):
             path = str(path)
             if len(path)==2:
                 path = "0"+path
@@ -53,4 +56,11 @@ def main():
 
 
 if __name__ == "__main__":
-    stats = main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--path-start', default=1)
+    parser.add_argument('--path-end', default=234)
+    parser.add_argument('--row-start', default=1)
+    parser.add_argument('--row-end', default=249)
+
+    args = parser.parse_args()
+    stats = main(args.path_start, args.path_end, args.row_start, args.row_end)
